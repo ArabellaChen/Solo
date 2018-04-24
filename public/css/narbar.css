@@ -1,0 +1,70 @@
+.navbar-line{
+    display: block;
+    border-top: 2px solid black;
+}
+
+.navbar{
+    font-size: 25px;
+    padding-bottom: 0px;
+}
+
+/* base viewport */
+@media all {
+    .navbar .navbar-nav .nav-link {
+        color: black;
+        padding-left: 60px;
+    }
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-width : 320px) and (max-width : 480px) {
+  .navbar .navbar-nav .nav-link {
+      color: yellow;
+      padding-left: 0px;
+  }
+}
+
+/* iPads (portrait and landscape) ----------- */
+@media only screen and (min-width : 550px) and (max-width : 991px) {
+  .navbar .navbar-nav .nav-link {
+      color: blue;
+      padding-left: 20px;
+  }
+}
+
+/* change the brand and text color */
+.navbar .navbar-brand,
+.navbar .navbar-text {
+    color: black;
+    padding-bottom: 0px;
+}
+
+.navbar .navbar-brand img{
+    width: 80px;
+    height: 80px;
+    padding-bottom: 0px;
+}
+
+
+.navbar .nav-item .nav-link.active{
+  color: #FF5733;
+}
+
+/* change the color of active or hovered links */
+.navbar .nav-item:active .nav-link,
+.navbar .nav-item:hover .nav-link {
+    color: #FF5733;
+}
+
+/* for dropdown only - change the color of droodown */
+.navbar .dropdown-menu {
+    background-color: white;
+}
+.navbar .dropdown-item {
+    color: black;
+}
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus {
+    color: #FF5733;
+    background-color: white;
+}
