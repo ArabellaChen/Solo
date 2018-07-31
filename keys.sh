@@ -12,6 +12,6 @@ export MASTER_KEY="Solo"
 
 export FILE_KEY="optional file key"
 
-export SERVER_URL=http://localhost:1337/parse
+export SERVER_URL=http://localhost:4000/parse
 
 export APP_NAME= ArabellaSolo

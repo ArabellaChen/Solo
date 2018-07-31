@@ -22,6 +22,7 @@
 </head>
 
 <body>
+
     <div class="container">
         <nav class="navbar navbar-expand-sm navbar-light">
 
@@ -31,7 +32,7 @@
           </button>
 
             <!-- Brand -->
-            <a class="navbar-brand" href="#"><img src="public/img/logo.jpg"></a>
+            <a class="navbar-brand" href="#"><img src="/public/img/logo.jpg"></a>
 
             <!-- Navbar links -->
             <div class="collapse navbar-collapse justify-content-end" id="nav-content">
@@ -40,7 +41,7 @@
                         <a class="nav-link <%if(active === 'whoAmI'){%> <%-'active'%> <%}%>" href="/">who am I</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <%if(active === 'planer'){%> <%-'active'%> <%}%>" href="planer">any plan</a>
+                        <a class="nav-link <%if(active === 'planer'){%> <%-'active'%> <%}%>" href="/planer">any plan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#Link3">let's chat</a>
@@ -49,21 +50,23 @@
                     <!-- Dropdown -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    more fun stuff
+                    computer vision
                   </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
+                            <a class="dropdown-item <%if(active === 'opencvInstall'){%> <%-'active'%> <%}%>" href="/imaging/opencv">add opencv on Mac </a>
+                            <a class="dropdown-item <%if(active === 'imageDenoising'){%> <%-'active'%> <%}%>" href="/imaging/denoising">denoising</a>
+                            <a class="dropdown-item <%if(active === 'imageDrawing'){%> <%-'active'%> <%}%>" href="/imaging/imageDrawing">drawing</a>
+                            <a class="dropdown-item <%if(active === 'edge'){%> <%-'active'%> <%}%>" href="/imaging/edge">edge detection and enhancement</a>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <%if(active === 'login'){%> <%-'active'%> <%}%>" href="login">login</a>
+                        <a class="nav-link <%if(active === 'signIn'){%> <%-'active'%> <%}%>" href="/signIn">Sign In</a>
                     </li>
                 </ul>
             </div>
         </nav>
         <hr class='navbar-line'>
     </div>
+
 
     <main role="main" class="container">

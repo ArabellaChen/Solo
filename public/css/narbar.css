@@ -63,6 +63,11 @@
 .navbar .dropdown-item {
     color: black;
 }
+.navbar .dropdown-item.active{
+  color: #FF5733;
+  background-color: white;
+}
+
 .navbar .dropdown-item:hover,
 .navbar .dropdown-item:focus {
     color: #FF5733;

@@ -3,8 +3,9 @@ var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
 var bodyParser = require('body-parser');
 
-var session = require('client-sessions');
-var cookieParser = require('cookie-parser');
+// var session = require('client-sessions');
+// var cookieParser = require('cookie-parser');
+var session = require('express-session')
 
 var api = new ParseServer({
     databaseURI: process.env.DATABASE_URI, // Connection string for your MongoDB database
@@ -18,8 +19,19 @@ var api = new ParseServer({
 // If you wish you require them, you can set them as options in the initialization above:
 // javascriptKey, restAPIKey, dotNetKey, clientKey
 
-var app = express();
+console.log(process.env.APP_ID);
 
+var app = express();
+// app.use(cookieParser());
+app.use(session({
+    'store': new session.MemoryStore(),
+    'secret': 'this is a secret for the cookie',
+    'resave': false,
+    'saveUninitialized': false,
+    'cookie': {
+        'maxAge': 7200000
+    } // expired in two hours
+}));
 
 app.set('views', 'views');
 app.set('view engine', 'ejs');
@@ -43,22 +55,41 @@ app.get('/', function(req, res) {
     });
 });
 
-app.get('/login', function(req, res) {
-    res.render('pages/login', {
-        active: 'login'
+app.get('/signIn', function(req, res) {
+    res.render('pages/signIn', {
+        active: 'signIn'
     });
 });
 
-app.post('/login', function(req, res) {
+app.post('/signIn', function(req, res) {
     console.log(req.body.username)
     console.log(req.body.password)
-    res.send('done')
+    Parse.User.logIn(req.body.username, req.body.password).then(function(user) {
+        req.session.phoenix = user.getSessionToken();
+        res.redirect("/imaging/opencv")
+    }).then(null, function(error) {
+        console.log("signIn error...", error.message);
+        req.session.phoenix = undefined;
+    });
 });
 
-app.get('/signUp', function(req, res) {
-    res.render('pages/signUp', {
-        active: 'login'
+app.get('/register', function(req, res) {
+    res.render('pages/register', {
+        active: 'signIn'
     });
+});
+
+app.post('/register', function(req, res) {
+    var user = new Parse.User();
+    user.set("username", req.body.username);
+    user.set("password", req.body.password);
+    user.set("email", req.body.email);
+    user.signUp().then(function(user) {
+        res.send(user.get("username"))
+    }, function(error) {
+        res.send("error")
+    })
+
 });
 
 app.get('/planer', function(req, res) {
@@ -67,12 +98,63 @@ app.get('/planer', function(req, res) {
     });
 });
 
+// app.use('/', function(req, res, next) {
+//     let token = req.session.phoenix;
+//     if (token === undefined || token === '') {
+//         console.log("empty token")
+//         res.redirect("/signIn");
+//     } else {
+//         // console.log("token = " + token);
+//         Parse.Cloud.httpRequest({
+//             url: Parse.serverURL + '/users/me',
+//             headers: {
+//                 'X-Parse-Application-Id': process.env.APP_ID,
+//                 'X-Parse-Session-Token': token
+//             }
+//         }).then(function(userData) {
+//             req.user = Parse.Object.fromJSON(userData.data);
+//             console.log(req.user.get("email"))
+//             console.log(req.user)
+//             next();
+//         }, function(error) {
+//             console.log("...authentication error..")
+//             req.session.phoenix = undefined;
+//             res.redirect("/signIn");
+//         });
+//     }
+// });
 
-var port = process.env.PORT || 1337;
+app.get('/imaging/opencv', function(req, res) {
+    res.render('pages/opencvInstall', {
+        active: 'opencvInstall'
+    });
+});
+
+app.get('/imaging/denoising', function(req, res) {
+    res.render('pages/imageDenoising', {
+        active: 'imageDenoising'
+    });
+});
+
+app.get('/imaging/imageDrawing', function(req, res) {
+    res.render('pages/imageDrawing', {
+        active: 'imageDrawing'
+    });
+});
+
+app.get('/imaging/edge', function(req, res) {
+    res.render('pages/edge', {
+        active: 'edge'
+    });
+});
+
+
+// var port = process.env.PORT || 1337;
+var port = process.env.PORT || 4000;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
     console.log('parse-server-example running on port ' + port + '.');
 });
 
-// This will enable the Live Query real-time server
-ParseServer.createLiveQueryServer(httpServer);
+// // This will enable the Live Query real-time server
+// ParseServer.createLiveQueryServer(httpServer);
