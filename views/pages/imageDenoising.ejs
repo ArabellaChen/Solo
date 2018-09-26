@@ -1,0 +1,141 @@
+<% include ../partials/header %>
+<link href="/public/css/prism.css" rel="stylesheet" />
+
+<div class="container">
+  <h5>Image Denoising</h5>
+  <div class="container">
+  <div>
+    <p>image denoising is the process that reconstruct a signal from a noisy one. It's the removal of unwanted signals
+    of random variations of color and brightness, like little dots, using various spatial and transform domain filters. Image blurring,
+    which also call image smoothing, is one of the denoising methods.Image blurring basically acts as low pass filtering
+    and high frequency components such as edges and boundaries are removed.</p>
+  </div>
+  <div class="row text-center">
+  <div class="col-sm-12"><img src="/public/img/denoise/lena.png" class="img-thumbnail" alt="Cinque Terre" id="image"></div>
+  </div><br>
+  <div class="row text-center">
+  <div class="col-sm-2"><img src="/public/img/denoise/lena.png" class="img-thumbnail" alt="Cinque Terre" id="lena"><br>Origin</div>
+  <div class="col-sm-2"><img src="/public/img/denoise/box.png" class="img-thumbnail" alt="Cinque Terre" id="box"><br>Box</div>
+  <div class="col-sm-2"><img src="/public/img/denoise/gaussian.png" class="img-thumbnail" alt="Cinque Terre" id="gaussian"><br>Gaussian</div>
+  <div class="col-sm-2"><img src="/public/img/denoise/median.png" class="img-thumbnail" alt="Cinque Terre" id="median"><br>Median</div>
+  <div class="col-sm-2"><img src="/public/img/denoise/bilateral.png" class="img-thumbnail" alt="Cinque Terre" id="bilateral"><br>Bilateral</div>
+  <div class="col-sm-2"><img src="/public/img/denoise/nonlocal_means.png" class="img-thumbnail" alt="Cinque Terre" id="nonlocal_means"><br>Nonlocal Means</div>
+  </div>
+  </div><br>
+
+  <h5>Difference Between Those Filters</h5>
+  <div class="container"><br>
+  <p>Both Box filter and Gaussian filter are linear operation, and do not preserve edges in the original image.<br><br>
+     Box filter is a simple averaging method, and it reduces fine image detail. Also, after box filter,
+     it cause the image has some grid effect. <br><br>
+     Gaussian filter gives more weight at the central pixels and less weights to the neighbors. Gaussian is a true
+     low-pass filter, so won’t cause high frequency artifacts. <br><br>
+     Both of Median filter and Bilateral filter are a non-linear filter. <br><br>
+     Median filter replace the pixel values with the median value available in the local neighborhood
+     (say, 5x5 or 3x3 pixels around the central pixel value). Median filter is edge preserving. <br><br>
+     Bilateral filter has a better edge-preserving compare to Median filter.When the Bilateral filter has a large
+     Sigma values (> 150), it will have a very strong effect, making the image look "cartoonish".<br><br>
+     From Wikipedia, the Non-local means is an algorithm in image processing for image denoising. Unlike "local mean" filters,
+     which take the mean value of a group of pixels surrounding a target pixel to smooth the image, non-local means
+     filtering takes a mean of all pixels in the image, weighted by how similar these pixels are to the target pixel.
+     This results in much greater post-filtering clarity, and less loss of detail in the image compared with local
+     mean algorithms.</p>
+  <br>
+  <h6>Box Fitler (kernal size: 3, 5, 7, 15)</h6>
+  <div class="row text-center">
+  <div class="col-sm-3"><img src="/public/img/denoise/box_3x3.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 3 x 3</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/box_5x5.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 5 x 5</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/box_7x7.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 7 x 7</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/box_15x15.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 15 x 15</div>
+</div><br>
+
+  <h6>Gaussian Fitler (kernal size: 3, 5, 7, 15)</h6>
+  <div class="row text-center">
+  <div class="col-sm-3"><img src="/public/img/denoise/gaussian_3x3.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 3 x 3</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/gaussian_5x5.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 5 x 5</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/gaussian_7x7.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 7 x 7</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/gaussian_15x15.png" class="img-thumbnail" alt="Cinque Terre"><br>ksize = 15 x 15</div>
+</div><br>
+
+  <h6>Median Fitler (filter size: 3, 5, 7, 15)</h6>
+  <div class="row text-center">
+  <div class="col-sm-3"><img src="/public/img/denoise/median_3.png" class="img-thumbnail" alt="Cinque Terre"><br>fsize = 3</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/median_5.png" class="img-thumbnail" alt="Cinque Terre"><br>fsize = 5</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/median_7.png" class="img-thumbnail" alt="Cinque Terre"><br>fsize = 7</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/median_15.png" class="img-thumbnail" alt="Cinque Terre"><br>fsize = 15</div>
+</div><br>
+
+  <h6>Bilateral Fitler (filterSize x sigmaColor x sigmaSpace)</h6>
+  <div class="row text-center">
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_3_75_75.png" class="img-thumbnail" alt="Cinque Terre"><br>3 x 75 x 75</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_5_75_75.png" class="img-thumbnail" alt="Cinque Terre"><br>5 x 75 x 75</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_7_75_75.png" class="img-thumbnail" alt="Cinque Terre"><br>7 x 75 x 75</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_9_75_75.png" class="img-thumbnail" alt="Cinque Terre"><br>9 x 75 x 75</div>
+  </div>
+  <div class="row text-center">
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_15_15_15.png" class="img-thumbnail" alt="Cinque Terre"><br>15 x 15 x 15</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_15_35_35.png" class="img-thumbnail" alt="Cinque Terre"><br>15 x 35 x 35</div>
+  <div class="col-sm-3"><img src="/public/img/denoise/bilateral_15_75_75.png" class="img-thumbnail" alt="Cinque Terre"><br>15 x 75 x 75</div>
+  </div>
+  </div><br>
+
+  <h5>Python code <a href="/public/code/denoising.py">(Download the code)</a></h5>
+  <div class="container">
+    <pre><code class="lang-python">
+    import cv2
+    import numpy as np
+
+    img = cv2.imread('lena.png')
+    cv2.imshow('original', img)
+
+    box = cv2.blur(img,(7,7))
+    cv2.imshow('box', box)
+
+    gaussian = cv2.GaussianBlur(img,(7,7), 3)
+    cv2.imshow('gaussian', gaussian)
+
+    median = cv2.medianBlur(img,5)
+    cv2.imshow('median', median)
+
+    bilateral = cv2.bilateralFilter(img,11,35,35)
+    cv2.imshow('bilateral', bilateral)
+
+    NlMeans = cv2.fastNlMeansDenoisingColored(img,None,10,10,21,7)
+    cv2.imshow('fastNlMeansDenoisingColored', NlMeans)
+
+    cv2.waitKey()
+    </code></pre>
+  </div><br>
+
+  <h5>C++ code</h5>
+  <div class="container">
+  <pre><code class="lang-cpp">
+    #include &lt;stdio.h&gt;
+    #include &lt;iostream&gt;
+    #include &lt;opencv2/opencv.hpp&gt;
+    #include &lt;opencv2/core/core.hpp&gt;
+    #include &lt;opencv2/highgui/highgui.hpp&gt;
+    #include &lt;opencv2/imgproc/imgproc.hpp&gt;
+    #include &lt;opencv2/features2d.hpp&gt;
+  	&amp;
+  </code></pre>
+  </div>
+</div>
+
+<script>
+  $("#lena, #box, #gaussian, #median, #bilateral, #nonlocal_means").mouseover(function(){
+    $(this).css( 'cursor', 'pointer' );
+  })
+  $("#lena, #box, #gaussian, #median, #bilateral, #nonlocal_means").click(function(){
+    var src = $(this).attr("src")
+    $("#image").fadeToggle(500, "swing", function(){
+      $("#image").attr("src", src)
+      $("#image").fadeToggle(500, "swing");
+    });
+
+
+  })
+</script>
+
+<script src="/public/js/prism.js"></script>
+<% include ../partials/footer %>

@@ -1,0 +1,83 @@
+<% include ../partials/header %>
+    <link href="/public/css/prism.css" rel="stylesheet" />
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+    <div class="container">
+        <h4>Edge detection and enhancement</h4>
+        <div class="container">
+          <div class="row text-center">
+          <div class="col-sm-4"><img src="/public/img/edge/origin.png" class="img-thumbnail" alt="Cinque Terre" ><br>Origin</div>
+          <div class="col-sm-4"><img src="/public/img/edge/sobelx.png" class="img-thumbnail" alt="Cinque Terre" ><br>Sobelx</div>
+          <div class="col-sm-4"><img src="/public/img/edge/sobely.png" class="img-thumbnail" alt="Cinque Terre" ><br>Sobely</div>
+          </div>
+          <div class="row text-center">
+          <div class="col-sm-4"><img src="/public/img/edge/laplacian.png" class="img-thumbnail" alt="Cinque Terre" ><br>Laplacian</div>
+          <div class="col-sm-4"><img src="/public/img/edge/canny.png" class="img-thumbnail" alt="Cinque Terre" ><br>Canny</div>
+          <div class="col-sm-4"><img src="/public/img/edge/edgeFromWeightDiff.png" class="img-thumbnail" alt="Cinque Terre" ><br>Edge From Weight Difference</div>
+          </div>
+        </div><br>
+        <h4>Weight Difference</h4>
+        <P>cv2.addWeighted(src1, alpha, src2, beta, gamma, dst) function, where dst = src1*alpha + src2*beta + gamma</p>
+        <div class="container">
+          <div class="row text-center">
+            <div class="col-sm-4"><img src="/public/img/edge/edgeFromWeightDiff.png" class="img-thumbnail" alt="Cinque Terre" ><br>alpha = 10, beta = -10, gamma = 0</div>
+            <div class="col-sm-4"><img src="/public/img/edge/weightDiffEdge.png" class="img-thumbnail" alt="Cinque Terre" ><br>alpha = 3, beta = -3, gamma = 100</div>
+            <div class="col-sm-4"><img src="/public/img/edge/edgeEnhancement.png" class="img-thumbnail" alt="Cinque Terre" ><br>alpha = 10, beta = -9, gamma = 0</div>
+          </div>
+        </div><br>
+        <h4>Python Code <a href="/public/code/edge.py">(Download the code)</a></h4>
+        <div class="container">
+    <pre>
+    <code class="lang-cpp">
+      import cv2
+      import numpy as np
+
+      # loading image
+      img = cv2.imread('home.jpg')
+
+      # resize to 60% of the origin
+      img = cv2.resize(img, (0, 0), None, .5, .5)
+
+      # remove noise using gaussian blur
+      blur = cv2.GaussianBlur(img,(3,3),0)
+      cv2.imshow("gaussian", blur)
+
+      # converting to gray scale
+      gray = cv2.cvtColor(blur, cv2.COLOR_BGR2GRAY)
+
+      # convolute with proper kernels
+      laplacian = cv2.Laplacian(gray,cv2.CV_64F)
+      sobelx = cv2.Sobel(gray,cv2.CV_64F,1,0,ksize=5)  # x
+      sobely = cv2.Sobel(gray,cv2.CV_64F,0,1,ksize=5)  # y
+      canny = cv2.Canny(gray,100,150)
+
+      cv2.imshow("origin", img)
+      cv2.imshow("laplacian", laplacian)
+      cv2.imshow("sobelx", sobelx)
+      cv2.imshow("sobely", sobely)
+      cv2.imshow("canny", canny)
+
+      weightDiffEdge = img.copy()
+      cv2.addWeighted(img, 1, blur, -1, 100, weightDiffEdge);
+      cv2.imshow("weightDiffEdge", weightDiffEdge)
+
+      addWeight = img.copy()
+      cv2.addWeighted(img, 10, blur, -10, 0, addWeight);
+      cv2.imshow("edgeFromWeightDiff", addWeight)
+
+      cv2.addWeighted(img, 10, blur, -9, 0, img);
+      cv2.imshow("edge enhancement", img)
+
+      cv2.waitKey() </code>
+      </pre>
+            <br>
+        </div>
+
+        <script src="/public/js/prism.js"></script>
+        <% include ../partials/footer %>

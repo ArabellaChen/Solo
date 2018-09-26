@@ -1,0 +1,67 @@
+<% include ../partials/header %>
+    <link href="/public/css/prism.css" rel="stylesheet" />
+    <style>
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+    <div class="container">
+        <h4>1. Install Homebrew</h4>
+        <div class="container">
+            <img src="/public/img/install/homebrew.png" class="rounded center" height="30%" width="30%" alt="Smiley face">
+            <br>
+            <pre><code class="lang-cpp">
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"  </code>
+    </pre>
+            <br>
+        </div>
+        <h4>2. Install Opencv</h4>
+        <div class="container">
+            <p>
+                Homebrew recently renamed opencv3 to opencv and opencv2 to opencv@2. Various options such as –with-qt, –with-tbb etc are also removed in the updated formula and CUDA support is also dropped.
+            </p>
+            <img src="/public/img/install/opencv.png" class="rounded center" height="20%" width="20%" alt="Smiley face">
+            <br>
+            <pre>
+    <code class="lang-cpp">
+      brew install opencv </code>
+  </pre>
+            <br>
+        </div>
+        <h4>3. For Python</h4>
+        <div class="container">
+            <img src="/public/img/install/Python.png" class="rounded center" height="30%" width="30%" alt="Smiley face">
+            <br>
+            <pre>
+    <code class="lang-cpp">
+      // Add the path of the Opencv site-packages to Python global site-packages
+      // For Python 2
+      echo /usr/local/opt/opencv/lib/python2.7/site-packages >> /usr/local/lib/python2.7/site-packages/opencv3.pth
+
+      // For Python 3
+      echo /usr/local/opt/opencv/lib/python3.6/site-packages >> /usr/local/lib/python3.6/site-packages/opencv3.pth  </code>
+  </pre>
+            <br>
+        </div>
+        <h4>3. For C++ </h4>
+        <div class="container">
+        <p>3.1 Go to App Store, intall Xcode</p>
+        <img src="/public/img/install/xcode.png" class="rounded center" height="20%" width="20%" alt="Smiley face">
+        <p>3.2 Install Command Line Tools</p>
+        <pre>
+    <code class="lang-cpp">
+      xcode-select --install </code>
+    </pre>
+        <br>
+        <p>3.3 Build with Xcode</p>
+        <img src="/public/img/install/BuildOpencv1.png" class="rounded center" height="100%" width="100%" alt="Smiley face">
+        <br>
+        <img src="/public/img/install/BuildOpencv2.png" class="rounded center" height="100%" width="100%" alt="Smiley face">
+        <br>
+        </div>
+    </div>
+    <script src="/public/js/prism.js"></script>
+    <% include ../partials/footer %>

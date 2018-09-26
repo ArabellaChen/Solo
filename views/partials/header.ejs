@@ -40,8 +40,19 @@
                     <li class="nav-item">
                         <a class="nav-link <%if(active === 'whoAmI'){%> <%-'active'%> <%}%>" href="/">who am I</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <%if(active === 'planer'){%> <%-'active'%> <%}%>" href="/planer">any plan</a>
+
+                    <!-- Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Full Stack Web
+                  </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item <%if(active === 'planer'){%> <%-'active'%> <%}%>" href="/web/fullCalendar">Full Calendar</a>
+                            <a class="dropdown-item <%if(active === 'dataTable'){%> <%-'active'%> <%}%>" href="/web/dataTable">DataTable</a>
+                            <a class="dropdown-item <%if(active === 'jsPDF'){%> <%-'active'%> <%}%>" href="/web/jsPDF">jsPDF</a>
+                            <a class="dropdown-item <%if(active === 'hummus'){%> <%-'active'%> <%}%>" href="/web/hummus">HummusJs</a>
+                            <a class="dropdown-item <%if(active === 'whiteboard'){%> <%-'active'%> <%}%>" href="/web/whiteboard">Whiteboard</a>                  
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#Link3">let's chat</a>

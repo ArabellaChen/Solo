@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 // var session = require('client-sessions');
 // var cookieParser = require('cookie-parser');
 var session = require('express-session')
+var request = require('request')
+// var hummus = require('hummus');
 
 var api = new ParseServer({
     databaseURI: process.env.DATABASE_URI, // Connection string for your MongoDB database
@@ -73,6 +75,30 @@ app.post('/signIn', function(req, res) {
     });
 });
 
+app.get('/resetPassword', function(req, res) {
+    res.render('pages/resetPassword', {
+        active: 'signIn'
+    });
+});
+
+app.post('/resetPassword', function(req, res) {
+    console.log(req.body.email)
+    res.render('pages/resetPasswordNotification', {
+        active: 'signIn'
+    });
+    // Parse.User.requestPasswordReset(req.body.email, {
+    //   success: function() {
+    //     // Password reset request was sent successfully
+    //     res.render('pages/resetPasswordNotification');
+    //   },
+    //   error: function(error) {
+    //     // Show the error message somewhere
+    //     console.log("Error: " + error.message);
+    //     res.send("Error: " + error.message);
+    //   }
+    // });
+});
+
 app.get('/register', function(req, res) {
     res.render('pages/register', {
         active: 'signIn'
@@ -92,11 +118,86 @@ app.post('/register', function(req, res) {
 
 });
 
-app.get('/planer', function(req, res) {
-    res.render('pages/planer', {
-        active: 'planer'
+app.get('/web/fullCalendar', function(req, res) {
+    res.render('pages/fullCalendar', {
+        active: 'fullCalendar'
     });
 });
+
+app.get('/web/dataTableData', function(req, res) {
+  var dataSet = [
+  { index: "", name : "Tiger Nixon", position : "System Architect", office : "Edinburgh", extn : "5421", startD : "2011/04/25", salary : "$320,800" , url: ""},
+  { index: "", name : "Garrett Winters", position : "Accountant", office : "Tokyo", extn : "8422", startD : "2011/07/25", salary : "$170,750" , url: "https://www.google.com/"},
+  { index: "", name : "Ashton Cox", position : "Junior Technical Author", office : "San Francisco", extn : "1562", startD : "2009/01/12", salary : "$86,000" , url: "https://www.amazon.com/"},
+  { index: "", name : "Cedric Kelly", position : "Senior Javascript Developer", office : "Edinburgh", extn : "6224", startD : "2012/03/29", salary : "$433,060" , url: ""},
+  { index: "", name : "Airi Satou", position : "Accountant", office : "Tokyo", extn : "5407", startD : "2008/11/28", salary : "$162,700" , url: ""},
+  { index: "", name : "Brielle Williamson", position : "Integration Specialist", office : "New York", extn : "4804", startD : "2012/12/02", salary : "$372,000" , url: ""},
+  { index: "", name : "Herrod Chandler", position : "Sales Assistant", office : "San Francisco", extn : "9608", startD : "2012/08/06", salary : "$137,500" , url: ""},
+  { index: "", name : "Rhona Davidson", position : "Integration Specialist", office : "Tokyo", extn : "6200", startD : "2010/10/14", salary : "$327,900" , url: ""},
+  { index: "", name : "Colleen Hurst", position : "Javascript Developer", office : "San Francisco", extn : "2360", startD : "2009/09/15", salary : "$205,500" , url: ""},
+  { index: "", name : "Sonya Frost", position : "Software Engineer", office : "Edinburgh", extn : "1667", startD : "2008/12/13", salary : "$103,600" , url: ""},
+  ];
+  res.send(dataSet)
+});
+
+app.get('/web/dataTable', function(req, res) {
+    res.render('pages/dataTable', {
+        active: 'dataTable'
+    });
+});
+
+app.get('/web/jsPDF', function(req, res) {
+    res.render('pages/jsPDF', {
+        active: 'jsPDF'
+    });
+});
+
+app.get('/web/hummus', function(req, res) {
+    res.render('pages/hummus', {
+        active: 'hummus'
+    });
+});
+
+app.get('/web/whiteboard', function(req, res) {
+    res.render('pages/whiteboard', {
+        active: 'whiteboard'
+    });
+});
+
+function pdfreader(url, pdfWriter, res){
+  if(url.length > 0){
+      var options = {
+          url: url.pop(),
+          method: "get",
+          encoding: null
+      };
+      request(options, function (error, response, body) {
+          if (error) {
+              console.error('error:', error);
+          } else {
+              const inStream = new hummus.PDFRStreamForBuffer(body)
+              pdfWriter.appendPDFPagesFromPDF(inStream)
+              pdfreader(url, pdfWriter, res)
+          }
+      });
+  }else{
+    pdfWriter.end();
+    res.end();
+  }
+}
+
+app.get('/web/hummus/pdf', function(req, res) {
+  var url1 = "http://localhost:4000/public/pdf/1.pdf"
+  var url2 = "http://localhost:4000/public/pdf/2.pdf"
+  var url = []
+  url.push(url1)
+  url.push(url2)
+
+  res.writeHead(200, {'Content-Type': 'application/pdf'});
+  var pdfWriter = hummus.createWriter(new hummus.PDFStreamForResponse(res));
+  pdfreader(url, pdfWriter, res)
+});
+
 
 // app.use('/', function(req, res, next) {
 //     let token = req.session.phoenix;

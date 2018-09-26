@@ -1,0 +1,129 @@
+<% include ../partials/header %>
+
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.4.2/css/buttons.dataTables.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+      th{
+          background-color: #DAF4F4;
+      }
+      div.dt-button-collection a.dt-button.active:not(.disabled) {
+          background-image: -webkit-linear-gradient(top, #75dcd8 0%, #dadada 100%);
+          box-shadow: inset 1px 1px 3px #14bfb4;
+      }
+    </style>
+
+    <table id="example" class="display" width="100%"></table>
+
+
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.2/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.4.2/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+
+    <script type="text/javascript">
+
+    var columns = [
+        { "data": "index", title: "Index" },
+        { "data": "name", title: "Name" },
+        { "data": "position", title: "Position" },
+        { "data": "office", title: "Office" },
+        { "data": "extn", title: "Extn." },
+        { "data": "startD", title: "Start date" },
+        { "data": "salary", title: "Salary" },
+        { "data": "url", title: "URL",
+        "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+          if(oData.url != ''){
+             //$(nTd).html("<a href='" + oData.url + "' target='_blank' style='cursor: pointer;'>URL</a>");
+             $(nTd).html("<a href='' style='cursor: pointer;'>URL</a>");
+             $(nTd).attr('url', oData.url)
+          }
+        }},
+    ]
+
+    $(document).ready(function() {
+        var table =  $('#example').DataTable({
+            ajax: {
+                type: 'GET',
+                url: '/web/dataTableData',
+                data: {},
+                dataSrc: ''
+            },
+            columns: columns,
+            dom: 'fBrtlip',
+            buttons: [
+                {
+                    extend: 'print',
+                    text:      '<i class="fa fa-print"></i>',
+                    titleAttr: 'Print',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    extend: 'copyHtml5',
+                    text:      '<i class="fa fa-files-o"></i>',
+                    titleAttr: 'Copy',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    text:      '<i class="fa fa-file-excel-o"></i>',
+                    titleAttr: 'Excel',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    extend: 'csvHtml5',
+                    text:      '<i class="fa fa-file-text-o"></i>',
+                    titleAttr: 'CSV',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    text:      '<i class="fa fa-file-pdf-o"></i>',
+                    titleAttr: 'PDF',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    },
+                    download: 'open'
+                },
+                'colvis',
+            ],
+            "columnDefs": [
+                            { width: "10px", targets: [0]},
+                            { targets: [0, 1, 2, 3, 4, 5, 6, 7], visible: true},
+                            { targets: '_all', visible: false }
+                          ],
+            "processing": true,
+            "language": {processing: '<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i><span class="sr-only">Loading...</span>'},
+        });
+        table.on( 'order.dt search.dt', function () {
+            table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                cell.innerHTML = i+1;
+            } );
+        } ).draw();
+        $('.dataTables_filter').addClass('float-left');
+        $('div.dt-buttons').addClass('float-right');
+        $('#example').css("margin-bottom", '20px');
+        $('#example tbody').on('click', 'td > a', function () {
+            var cell = table.cell($(this).parent())
+            if(cell.index().column == 7)
+              window.open(cell.nodes().to$().attr("url"), '_blank');
+        });
+    });
+    </script>
+<% include ../partials/footer %>

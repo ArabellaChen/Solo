@@ -1,0 +1,51 @@
+<% include ../partials/header %>
+  <script type="text/javascript" src="/public/js/jspdf.min.js"></script>
+  <div>
+    <p>JsPDF is a front library for converting image, html into PDF, also be able to add text and drawing on the PDF</p>
+    <p>Refer to <a href="https://github.com/MrRio/jsPDF">https://github.com/MrRio/jsPDF</a></p>
+  </div>
+  <div>
+    <object id="displayPDF" type="application/pdf" width=100% height="600px" data=""></object>
+  </div>
+
+  <script type="text/javascript">
+  function imgToPdf(pdf, urls){
+    if(urls.length > 0){
+      var img = new Image;
+      img.onload = function() {
+          var width = pdf.internal.pageSize.width;
+          var height = pdf.internal.pageSize.height;
+          pdf.addImage(this, 'JPEG', width/4, height/4, width/2, height/2);
+          if(urls.length > 0){
+            pdf.addPage()
+            imgToPdf(pdf, urls)
+          }else{
+            $("#displayPDF").attr('data', pdf.output('datauristring'))
+          }
+      };
+      img.crossOrigin = "";
+      img.src = urls.pop();
+    }
+  }
+
+  var urls = ["/public/img/flower.jpg", "/public/img/logo.jpg"]
+  var pdf = new jsPDF("p", "mm", "a4");
+  // I know the proper spelling is colour ;)
+  pdf.setTextColor(100)
+  pdf.text(20, 20, 'This is gray.')
+
+  pdf.setTextColor(150)
+  pdf.text(20, 30, 'This is light gray.')
+
+  pdf.setTextColor(255, 0, 0)
+  pdf.text(20, 40, 'This is red.')
+
+  pdf.setTextColor(0, 255, 0)
+  pdf.text(20, 50, 'This is green.')
+
+  pdf.setTextColor(0, 0, 255)
+  pdf.text(20, 60, 'This is blue.')
+  pdf.addPage()
+  imgToPdf(pdf, urls)
+ </script>
+<% include ../partials/footer %>

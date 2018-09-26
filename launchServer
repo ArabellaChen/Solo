@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd ~/Documents/parseServer/Solo
+source keys.sh
+nodemon index.js
