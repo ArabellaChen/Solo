@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 // var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var request = require('request')
-// var hummus = require('hummus');
+var hummus = require('hummus');
 
 var api = new ParseServer({
     databaseURI: process.env.DATABASE_URI, // Connection string for your MongoDB database
@@ -155,6 +155,12 @@ app.get('/web/jsPDF', function(req, res) {
 app.get('/web/hummus', function(req, res) {
     res.render('pages/hummus', {
         active: 'hummus'
+    });
+});
+
+app.get('/web/chartjs', function(req, res) {
+    res.render('pages/chartjs', {
+        active: 'chartjs'
     });
 });
 

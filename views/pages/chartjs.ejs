@@ -1,109 +1,152 @@
 <% include ../partials/header %>
 <style>
-* {
-	margin: 0;
-	padding: 0;
-}
-
-body, html {
-	height: 100%;
-}
-
-#myCanvas {
-  border: 2px solid lightgray;
-  border-radius: 5px;
-	cursor: crosshair;
-  position: fixed;
+canvas {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
 }
 </style>
-<canvas id="myCanvas">
-Sorry, your browser does not support HTML5 canvas technology.
-</canvas>
-
+<div>
+	<canvas id="canvas"></canvas>
+</div>
+<script type="text/javascript" src="/public/js/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
 <script>
-  window.onload = function() {
-    var myCanvas = document.getElementById("myCanvas");
-    var ctx = myCanvas.getContext("2d");
+  var ctx = document.getElementById("canvas").getContext('2d');
+  dataSet = [
+	{
+	    yAxisID: 'A',
+			label : "A",
+	    data: [],
+	    backgroundColor: 'rgba(255, 99, 132, .2)',
+	    borderColor: 'rgba(255, 99, 132, 1)',
+	    fill: true,
+	    borderWidth: 2
+  },
+  {
+      yAxisID: 'B',
+			label : "B",
+      data: [],
+      backgroundColor: 'rgba(75, 192, 192, 1)',
+      borderColor: 'rgba(75, 192, 192, 1)',
+      fill: false,
+      borderWidth: 2,
+      pointStyle: 'rect',
+  },
+  {
+      yAxisID: 'B',
+			label : "C",
+      data: [],
+      backgroundColor: 'rgba(22, 24, 184, 1)',
+      borderColor: 'rgba(22, 24, 184, 1)',
+      pointStyle: 'crossRot',
+      radius : 10,
+      borderWidth : 3,
+      type: 'bubble',
+  }]
 
-    // Fill Window Width and Height
-    myCanvas.width = window.innerWidth;
-    myCanvas.height = window.innerHeight;
-
-  // Set Background Color
-    ctx.fillStyle="#fff";
-    ctx.fillRect(0,0,myCanvas.width,myCanvas.height);
-
-    // Mouse Event Handlers
-    if(myCanvas){
-      var isDown = false;
-      var canvasX, canvasY;
-      ctx.lineWidth = 5;
-
-      $(myCanvas)
-      .mousedown(function(e){
-        isDown = true;
-        ctx.beginPath();
-        canvasX = e.pageX - myCanvas.offsetLeft;
-        canvasY = e.pageY - myCanvas.offsetTop;
-        ctx.moveTo(canvasX, canvasY);
-      })
-      .mousemove(function(e){
-        if(isDown !== false) {
-          canvasX = e.pageX - myCanvas.offsetLeft;
-          canvasY = e.pageY - myCanvas.offsetTop;
-          ctx.lineTo(canvasX, canvasY);
-          ctx.strokeStyle = "#000";
-          ctx.stroke();
-        }
-      })
-      .mouseup(function(e){
-        isDown = false;
-        ctx.closePath();
-      });
-    }
-
-    // Touch Events Handlers
-    draw = {
-      started: false,
-      start: function(evt) {
-
-        ctx.beginPath();
-        ctx.moveTo(
-          evt.touches[0].pageX,
-          evt.touches[0].pageY
-        );
-
-        this.started = true;
-
+  var myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+          labels: [],
+          datasets: dataSet
       },
-      move: function(evt) {
+			options: {
+			    scaleShowValues: true,
+			    scales: {
+			       xAxes: [{
+			          bounds: 'ticks',
+			          type: 'time',
+			          time: {
+			             unit: 'month',
+			             autoSkip: false,
+			             stepSize: 1,
+			             displayFormats: {
+			                month: 'MMM YYYY'
+			             }
+			          },
+			          scaleLabel: {
+			            display: true,
+			            labelString: 'Month'
+			          },
+			       }],
+			       yAxes: [{
+			               id: 'A',
+			               type: 'linear',
+			               position: 'left',
+			               display: true,
+			               ticks: {
+			                 min: 0
+			               },
+			               scaleLabel: {
+			                 display: true,
+			                 labelString: 'Size (cm^2)'
+			               }
+			             },
+									 {
+ 		 			               id: 'B',
+ 		 			               type: 'linear',
+ 		 			               position: 'right',
+ 		 			               display: true,
+ 		 			               ticks: {
+ 		 			                 min: 0
+ 		 			               },
+ 		 			               scaleLabel: {
+ 		 			                 display: true,
+ 		 			                 labelString: 'salary ($)'
+ 		 			               }
+ 		 			          }]
+			      }
+			    }
+  });
 
-        if (this.started) {
-          ctx.lineTo(
-            evt.touches[0].pageX,
-            evt.touches[0].pageY
-          );
+  function clearChart(){
+    dataSet[0].data = []
+    dataSet[1].data = []
+    dataSet[2].data = []
+    myChart.data.labels = []
+    myChart.data.datasets = dataSet
+    myChart.update()
+  }
 
-          ctx.strokeStyle = "#000";
-          ctx.lineWidth = 5;
-          ctx.stroke();
-        }
+	function createChart(){
+		var dataA = [ { x: "2018-03-01 18:00:01", y: "230" },
+									{ x: "2018-04-01 19:00:00", y: "232" },
+									{ x: "2018-05-15 20:00:00", y: "236" },
+									{ x: "2018-06-01 03:00:00", y: "228" }];
 
-      },
-      end: function(evt) {
-        this.started = false;
-      }
-    };
+		var dataB = [ { x: "2018-05-01 18:00:01", y: "1230" },
+									{ x: "2018-08-01 19:00:00", y: "1232" },
+									{ x: "2018-10-15 20:00:00", y: "1236" },
+									{ x: "2018-11-01 03:00:00", y: "1228" }];
 
-    // Touch Events
-    myCanvas.addEventListener('touchstart', draw.start, false);
-    myCanvas.addEventListener('touchend', draw.end, false);
-    myCanvas.addEventListener('touchmove', draw.move, false);
+		var dataC = [ { x: "2018-08-01 19:00:00", y: "1232" },
+									{ x: "2018-11-01 03:00:00", y: "1228" }];
 
-    // Disable Page Move
-    document.body.addEventListener('touchmove',function(evt){
-      evt.preventDefault();
-    },false);
-  };
+		// parse labels and data
+		var labels = []
+		for (var i = 1; i <= 9; i++) {
+		     var label = moment("2018-01-01", "YYYY-MM-DD").add(i, 'month').format('YYYY-MM-DD HH:mm:ss');
+		     labels.push(label);
+		}
+
+		for (var i = 0; i < dataA.length; i++){
+		  dataA[i].x = moment(dataA[i].x, "YYYY-MM-DD HH:mm:ss")
+		}
+		for (var i = 0; i < dataB.length; i++){
+			dataB[i].x = moment(dataB[i].x, "YYYY-MM-DD HH:mm:ss")
+		}
+		for (var i = 0; i < dataC.length; i++){
+			dataC[i].x = moment(dataC[i].x, "YYYY-MM-DD HH:mm:ss")
+		}
+
+		myChart.data.labels = labels
+		myChart.data.datasets[0].data = dataA
+		myChart.data.datasets[1].data = dataB
+		myChart.data.datasets[2].data = dataC
+		myChart.update()
+	}
+
+	createChart()
 </script>
-<% include ../partials/footer %>
